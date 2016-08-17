@@ -7,7 +7,9 @@ package net.sf.arbocdi.pa;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
+import net.sf.arbocdi.pa.printer.AbstractPrinter;
 import net.sf.arbocdi.pa.printer.Mode1Printer;
 import net.sf.arbocdi.pa.printer.Mode2Printer;
 import net.sf.arbocdi.pa.printer.Mode3Printer;
@@ -19,11 +21,22 @@ import org.apache.commons.io.FileUtils;
  */
 public class Launcher {
 
+    private static final String FILE_INPUT = "input.txt";
+    private static final String FILE_PATTERNS = "patterns.txt";
+
+    private static final String CHARSET = "UTF-8";
+
     public static void main(String[] args) throws IOException {
-        List<String> inputList = FileUtils.readLines(new File("input.txt"), "UTF-8");
-        List<String> patternList = FileUtils.readLines(new File("patterns.txt"), "UTF-8");
-        (new Mode1Printer()).printLines(inputList, patternList);
-        (new Mode2Printer()).printLines(inputList, patternList);
-        (new Mode3Printer()).printLines(inputList, patternList);
+        List inputList = readLines(FILE_INPUT);
+        List patternList = readLines(FILE_PATTERNS);
+
+        List<AbstractPrinter> printers = Arrays.asList(new Mode1Printer(), new Mode2Printer(), new Mode3Printer());
+        for (AbstractPrinter printer : printers) {
+            printer.printLines(inputList, patternList);
+        }
+    }
+
+    private static List readLines(String fileName) throws IOException {
+        return FileUtils.readLines(new File(fileName), CHARSET);
     }
 }

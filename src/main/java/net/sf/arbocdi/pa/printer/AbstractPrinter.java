@@ -17,10 +17,12 @@ public abstract class AbstractPrinter {
         System.out.println(String.format("#Printing lines using %s", this.getClass().getSimpleName()));
         for (String inputLine : inputList) {
             for (String pattern : patternList) {
-                if (this.checkLine(inputLine, pattern)) {
-                    System.out.println(inputLine);
-                    break;
+                if (!this.checkLine(inputLine, pattern)) {
+                    continue;
+
                 }
+                System.out.println(inputLine);
+                break;
             }
         }
     }
